@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-light bg-dark ps-3">
-    <a href="{% url 'home' %}" class="navbar-brand"><i class="material-icons text-success md-48">store</i></a>
+    <a href="/" class="navbar-brand"><i class="material-icons text-success md-48">store</i></a>
     <button class="navbar-toggler bg-light" data-bs-toggle="collapse" data-bs-target="#navbar"><span
             class="navbar-toggler-icon"></span></button>
     <div id="navbar" class="collapse navbar-collapse justify-content-between">
@@ -7,16 +7,49 @@
             <li class="nav-item dropdown"><a class="nav-link text-light dropdown-toggle text-uppercase fw-bold px-3"
                                              data-bs-toggle="dropdown" href="#">Categories</a>
                 <div class="dropdown-menu">
-                    <a href="#" class="dropdown-item">Category1</a>
-                    <a href="#" class="dropdown-item">Category2</a>
-                    <a href="#" class="dropdown-item">Category3</a>
-                    <a href="#" class="dropdown-item">Category4</a>
-                    <a href="#" class="dropdown-item">Category5</a>
+                    <a href="{% url 'home' %}" class="dropdown-item">All Products</a>
+                    {% for category in links %}
+                    <a href="{{ category.get_url }}" class="dropdown-item">{{ category.name }}</a>
+                    {% endfor %}
                 </div>
             </li>
             <li class="nav-item"><a class="nav-link text-light text-uppercase fw-bold px-3" href="#">Contacts</a></li>
-            <li class="nav-item"><a class="nav-link text-light text-uppercase fw-bold px-3" href="{% url 'product' %}">About</a>
+            <li class="nav-item"><a class="nav-link text-light text-uppercase fw-bold px-3" href="# ">About</a></li>
+            {% if request.user.is_authenticated and request.user.first_name %}
+            <li class="nav-item">
+                <span class="nav-link text-light text-uppercase fw-bold px-3">
+                    Welcome, {{ request.user.first_name }}!
+                    <i class="material-icons cart-icon">account_circle</i>
+                </span>
             </li>
+            <li class="nav-item">
+                <a class="nav-link text-light text-uppercase fw-bold px-3" href="{% url 'logout' %}">
+                    Sign Out
+                    <i class="material-icons cart-icon">logout</i>
+                </a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <a class="nav-link text-light text-uppercase fw-bold px-3" href="{% url 'signup' %}">
+                    Sign up
+                    <i class="material-icons cart-icon">add</i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-light text-uppercase fw-bold px-3" href="{% url 'login' %}">
+                    Log in
+                    <i class="material-icons cart-icon">login</i>
+                </a>
+            </li>
+            {% endif %}
+            {% if item_count > 0 %}
+            <li class="nav-item">
+                <a class="nav-link text-light text-uppercase fw-bold px-3" href="{% url 'cart_detail' %}">
+                    <i class="material-icons cart-icon">add_shopping_cart</i>
+                    ({{ item_count }})
+                </a>
+            </li>
+            {% endif %}
         </ul>
 
         <form class="form-inline">
